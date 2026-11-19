@@ -16,13 +16,24 @@ def load_raw(data_dir: str | Path) -> pd.DataFrame:
     Only the labelled train files are used; Kaggle's test files have no labels.
     Floats are downcast to float32, which roughly halves memory (~1 GB instead of ~2 GB).
     """
-    data_dir = Path(data_dir)
+    data_dir = _find_data_dir(Path(data_dir))
     txn = pd.read_csv(data_dir / "train_transaction.csv")
     ident = pd.read_csv(data_dir / "train_identity.csv")
     # Kaggle's test identity file spells these id-30; normalise in case of mixed files.
     ident.columns = [c.replace("-", "_") for c in ident.columns]
     df = txn.merge(ident, on="TransactionID", how="left")
     return downcast(df)
+
+
+def _find_data_dir(data_dir: Path) -> Path:
+    """Kaggle's mount path varies (/kaggle/input/<slug> or /kaggle/input/competitions/<slug>)."""
+    if (data_dir / "train_transaction.csv").exists():
+        return data_dir
+    root = data_dir if data_dir.exists() else data_dir.parent
+    hit = next(root.rglob("train_transaction.csv"), None)
+    if hit is None:
+        raise FileNotFoundError(f"train_transaction.csv not found under {root}")
+    return hit.parent
 
 
 def downcast(df: pd.DataFrame) -> pd.DataFrame:

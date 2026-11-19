@@ -134,3 +134,9 @@ def test_baseline_end_to_end(prepared, tmp_path):
     append_results_row(results, path)
     append_results_row(results, path)
     assert len(pd.read_csv(path)) == 1
+
+
+def test_load_raw_finds_nested_kaggle_mount(tmp_path):
+    write_raw(tmp_path / "input" / "competitions" / "ieee-fraud-detection", n_cards=5)
+    df = load_raw(tmp_path / "input" / "ieee-fraud-detection")  # the old, missing path
+    assert len(df) > 0
