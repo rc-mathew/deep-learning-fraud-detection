@@ -11,7 +11,7 @@ Every model is judged on the same **time-based split** (train on the past, test 
 
 | Model | Recall @ 1% FPR | Recall @ 5% FPR | PR-AUC | ROC-AUC |
 | --- | --- | --- | --- | --- |
-| XGBoost baseline | _week 4_ | | | |
+| XGBoost baseline | 0.470 | 0.650 | 0.551 | 0.903 |
 | Transformer, from scratch | _week 6_ | | | |
 | Transformer, pretrained | _week 6_ | | | |
 | GNN (GraphSAGE) | _week 7_ | | | |
