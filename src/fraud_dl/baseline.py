@@ -15,7 +15,7 @@ import pandas as pd
 import xgboost as xgb
 
 from . import config
-from .metrics import fraud_report
+from .metrics import card_had_prior_fraud, fraud_report
 
 # Engineered columns that belong to the sequence pipeline, not the tabular model.
 _SEQ_ONLY = ["uid_code", "group_start", "pos_in_card"]
@@ -62,9 +62,10 @@ def train_baseline(df: pd.DataFrame, use_gpu: bool = False, seed: int = 42) -> t
 
     results = {"model": "xgboost_baseline", "best_iteration": int(model.best_iteration),
                "train_seconds": round(train_secs, 1), "n_features": int(X.shape[1])}
+    prior = card_had_prior_fraud(y, df["group_start"].to_numpy())
     for name, mask in [("val", va), ("test", te)]:
         scores = model.predict_proba(X[mask])[:, 1]
-        results[name] = fraud_report(y[mask], scores)
+        results[name] = fraud_report(y[mask], scores, prior[mask])
     return model, results
 
 
@@ -77,6 +78,7 @@ def append_results_row(results: dict, path: Path) -> None:
         "recall_at_5pct_fpr": round(t["recall_at_5pct_fpr"], 4),
         "pr_auc": round(t["pr_auc"], 4),
         "roc_auc": round(t["roc_auc"], 4),
+        "first_fraud_recall_at_1pct_fpr": round(t.get("first_fraud_recall_at_1pct_fpr", float("nan")), 4),
         "test_rows": t["n"],
     }])
     if path.exists():

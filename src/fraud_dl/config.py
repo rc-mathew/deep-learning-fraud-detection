@@ -13,7 +13,7 @@ GAP_DAYS = 0
 VELOCITY_WINDOWS = {"1h": 3_600, "24h": SECONDS_PER_DAY, "7d": 7 * SECONDS_PER_DAY}
 
 # Transformer inputs (week 5). The label is never an input.
-SEQ_LEN = 32
+SEQ_LEN = 16  # only 2.5% of IEEE-CIS transactions have 32 earlier card transactions
 MIN_CAT_COUNT = 5  # categories seen fewer times in train become UNK
 PAD_ID, UNK_ID = 0, 1
 

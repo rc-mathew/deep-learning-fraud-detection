@@ -29,7 +29,7 @@ Every model is judged on the same **time-based split** (train on the past, test 
    seconds since the previous transaction, and amount vs the card's earlier average.
 5. **Sequence table** for the transformer: one encoded row per transaction, sorted by card then time.
    Vocabularies and scaling are fitted on train rows only. `window_indices()` returns each transaction's
-   last 32 card transactions. Earlier transactions' labels are never inputs.
+   last 16 card transactions. Earlier transactions' labels are never inputs.
 
 ```
 src/fraud_dl/
@@ -40,7 +40,10 @@ src/fraud_dl/
   metrics.py     recall @ FPR, PR-AUC, ROC-AUC
   prepare.py     python -m fraud_dl.prepare --data-dir ... --out-dir artifacts
   baseline.py    python -m fraud_dl.baseline --artifacts artifacts
-notebooks/week4_data_and_baseline.ipynb   runs both on Kaggle or Colab
+  transformer.py transformer written from scratch, masked-field pretraining, fine-tuning
+  transformer_run.py  python -m fraud_dl.transformer_run --artifacts artifacts
+notebooks/week4_data_and_baseline.ipynb   week 4 on Kaggle or Colab
+notebooks/week5_6_transformer.ipynb       weeks 5-6 on a Kaggle GPU
 tests/           pipeline tests on a synthetic IEEE-CIS-shaped dataset
 ```
 
@@ -57,5 +60,7 @@ python -m fraud_dl.baseline --artifacts artifacts
 
 ## Known caveat
 
-IEEE-CIS labels later transactions of a defrauded account as fraud too. Models that see card history can
-pick that up, which flatters them compared with production. `data_report.json` measures how strong the effect is.
+IEEE-CIS labels later transactions of a defrauded account as fraud too: after a card's first fraud, 44.7% of its
+later transactions are fraud, against 3.5% overall. Models that see card history pick that up, which flatters
+them compared with production. Every model therefore also reports **first-fraud recall**: recall at 1% FPR
+on transactions from cards with no earlier fraud.
