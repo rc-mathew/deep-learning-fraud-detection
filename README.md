@@ -9,14 +9,14 @@ Every model is judged on the same **time-based split** (train on the past, test 
 
 ## Results (test set: last 30 days)
 
-| Model | Recall @ 1% FPR | Recall @ 5% FPR | PR-AUC | ROC-AUC | First-fraud recall @ 1% FPR |
-| --- | --- | --- | --- | --- | --- |
-| XGBoost baseline | **0.466** | **0.652** | **0.552** | **0.903** | **0.545** |
-| Transformer, from scratch | 0.378 | 0.590 | 0.430 | 0.858 | 0.414 |
-| Transformer, pretrained | 0.381 | 0.565 | 0.418 | 0.859 | 0.393 |
-| GNN (GraphSAGE) | _week 7_ | | | | |
-| Autoencoder | _week 7_ | | | | |
-| Ensemble | _week 8_ | | | | |
+| Model | Recall @ 1% FPR | Recall @ 5% FPR | PR-AUC | ROC-AUC | First-fraud recall @ 1% FPR | Ring-fraud recall @ 1% FPR |
+| --- | --- | --- | --- | --- | --- | --- |
+| XGBoost baseline | **0.470** | **0.650** | **0.551** | **0.903** | **0.541** | **0.779** |
+| Transformer, from scratch | 0.378 | 0.590 | 0.430 | 0.858 | 0.414 | not measured |
+| Transformer, pretrained | 0.381 | 0.565 | 0.418 | 0.859 | 0.393 | not measured |
+| GNN (GraphSAGE) | 0.310 | 0.488 | 0.355 | 0.842 | 0.351 | 0.591 |
+| Autoencoder (no labels) | 0.007 | 0.344 | 0.121 | 0.772 | 0.011 | 0.009 |
+| Ensemble | _week 8_ | | | | | |
 
 First-fraud recall drops transactions from cards that already had a fraud (see Known caveat).
 
@@ -26,6 +26,16 @@ month (0.430 vs 0.418). Pretraining saw the validation period's transactions, so
 partly familiarity with that month. Both transformers trail XGBoost by about 9 points of recall at 1% FPR.
 They see about 40 fields per transaction, while XGBoost uses all 434, including the V and full C/D columns.
 Whether the transformer adds anything is tested in the week 8 ensemble.
+
+**Week 7 finding.** The past-only entity graph has 3,874,622 edges (card 1,214,284; device 204,552;
+email domain + address 2,455,786). Ring transactions, whose device was used earlier by a different card,
+are 6.2% of the test month (5,311 rows) and 16.7% of them are fraud, almost 5x the base rate, so shared
+devices are a real signal. XGBoost still catches more of that ring fraud (77.9% vs 59.1%), likely because
+its per-card features and 434 columns already capture much of it. GraphSAGE was still improving when it
+hit its 300-epoch cap on CPU (validation PR-AUC 0.45), so it is undertrained. The autoencoder, trained
+without labels, ranks fraud above chance (ROC-AUC 0.77, 34% recall at 5% FPR) but is almost useless at
+1% FPR; its value, if any, is as an extra signal in the ensemble. XGBoost rows differ slightly between
+runs (0.466 GPU, 0.470 CPU).
 
 ## Data pipeline (week 4)
 
