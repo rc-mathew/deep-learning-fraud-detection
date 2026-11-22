@@ -9,14 +9,23 @@ Every model is judged on the same **time-based split** (train on the past, test 
 
 ## Results (test set: last 30 days)
 
-| Model | Recall @ 1% FPR | Recall @ 5% FPR | PR-AUC | ROC-AUC |
-| --- | --- | --- | --- | --- |
-| XGBoost baseline | 0.470 | 0.650 | 0.551 | 0.903 |
-| Transformer, from scratch | _week 6_ | | | |
-| Transformer, pretrained | _week 6_ | | | |
-| GNN (GraphSAGE) | _week 7_ | | | |
-| Autoencoder | _week 7_ | | | |
-| Ensemble | _week 8_ | | | |
+| Model | Recall @ 1% FPR | Recall @ 5% FPR | PR-AUC | ROC-AUC | First-fraud recall @ 1% FPR |
+| --- | --- | --- | --- | --- | --- |
+| XGBoost baseline | **0.466** | **0.652** | **0.552** | **0.903** | **0.545** |
+| Transformer, from scratch | 0.378 | 0.590 | 0.430 | 0.858 | 0.414 |
+| Transformer, pretrained | 0.381 | 0.565 | 0.418 | 0.859 | 0.393 |
+| GNN (GraphSAGE) | _week 7_ | | | | |
+| Autoencoder | _week 7_ | | | | |
+| Ensemble | _week 8_ | | | | |
+
+First-fraud recall drops transactions from cards that already had a fraud (see Known caveat).
+
+**Weeks 5-6 finding.** Masked-field pretraining worked as a task: its loss fell every epoch, from 1.24 to 0.44
+over 10 epochs. It lifted validation PR-AUC from 0.515 to 0.557, but that gain did not carry to the test
+month (0.430 vs 0.418). Pretraining saw the validation period's transactions, so its validation gain is
+partly familiarity with that month. Both transformers trail XGBoost by about 9 points of recall at 1% FPR.
+They see about 40 fields per transaction, while XGBoost uses all 434, including the V and full C/D columns.
+Whether the transformer adds anything is tested in the week 8 ensemble.
 
 ## Data pipeline (week 4)
 
