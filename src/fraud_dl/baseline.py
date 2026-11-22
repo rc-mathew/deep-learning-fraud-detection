@@ -79,6 +79,7 @@ def append_results_row(results: dict, path: Path) -> None:
         "pr_auc": round(t["pr_auc"], 4),
         "roc_auc": round(t["roc_auc"], 4),
         "first_fraud_recall_at_1pct_fpr": round(t.get("first_fraud_recall_at_1pct_fpr", float("nan")), 4),
+        "ring_recall_at_1pct_fpr": round(t.get("ring_recall_at_1pct_fpr", float("nan")), 4),
         "test_rows": t["n"],
     }])
     if path.exists():

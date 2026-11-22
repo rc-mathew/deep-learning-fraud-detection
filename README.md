@@ -51,8 +51,12 @@ src/fraud_dl/
   baseline.py    python -m fraud_dl.baseline --artifacts artifacts
   transformer.py transformer written from scratch, masked-field pretraining, fine-tuning
   transformer_run.py  python -m fraud_dl.transformer_run --artifacts artifacts
+  graph.py       past-only entity graph (card, device, email + address) and GraphSAGE
+  anomaly.py     autoencoder trained on legitimate transactions
+  week7_run.py   python -m fraud_dl.week7_run --artifacts artifacts
 notebooks/week4_data_and_baseline.ipynb   week 4 on Kaggle or Colab
 notebooks/week5_6_transformer.ipynb       weeks 5-6 on a Kaggle GPU
+notebooks/week7_graph_autoencoder.ipynb   week 7 on a Kaggle GPU
 tests/           pipeline tests on a synthetic IEEE-CIS-shaped dataset
 ```
 
