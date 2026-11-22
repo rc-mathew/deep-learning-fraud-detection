@@ -55,7 +55,8 @@ def run(art: Path, gnn_epochs: int = 300, ae_epochs: int = 10, device: str | Non
     # XGBoost again, to score it on the ring slice.
     xgb_model, _ = train_baseline(df, use_gpu=use_gpu_xgb)
     X, cat_cols = feature_frame(df)
-    xgb_scores = xgb_model.predict_proba(X.iloc[test])[:, 1]
+    xgb_all = xgb_model.predict_proba(X)[:, 1]
+    xgb_scores = xgb_all[test]
     out["xgboost_baseline"] = {"model": "xgboost_baseline", "test": report(y[test], xgb_scores, prior[test], ring[test])}
 
     # GraphSAGE, full batch.
@@ -76,15 +77,17 @@ def run(art: Path, gnn_epochs: int = 300, ae_epochs: int = 10, device: str | Non
     xm = numeric_matrix(X, num_cols, normal)
     ae, ae_hist = train_autoencoder(xm, normal, device, epochs=ae_epochs)
     torch.save(ae.state_dict(), art / "models" / "autoencoder.pt")
-    ae_scores = anomaly_score(ae, xm, test, device)
+    ae_all = anomaly_score(ae, xm, np.arange(len(df)), device)
+    ae_scores = ae_all[test]
     out["autoencoder"] = {"model": "autoencoder", "history": ae_hist,
                           "test": report(y[test], ae_scores, prior[test], ring[test])}
 
     for name in ("xgboost_baseline", "graphsage", "autoencoder"):
         append_results_row(out[name], art / "results.csv")
         print(name, json.dumps(out[name]["test"], indent=1))
-    np.savez_compressed(art / "week7_test_scores.npz", row=test, xgboost=xgb_scores,
-                        graphsage=gnn_scores[test], autoencoder=ae_scores)  # for the week 8 ensemble
+    # Every row's score (val and test), in transactions.parquet order, for the week 8 ensemble.
+    np.savez_compressed(art / "week7_scores.npz", transaction_id=df["TransactionID"].to_numpy(),
+                        xgboost=xgb_all, graphsage=gnn_scores, autoencoder=ae_all)
     (art / "week7_results.json").write_text(json.dumps(out, indent=1))
     return out
 

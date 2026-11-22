@@ -82,6 +82,6 @@ def test_run_end_to_end(art):
     for name in ("xgboost_baseline", "graphsage", "autoencoder"):
         t = out[name]["test"]
         assert 0 <= t["recall_at_1pct_fpr"] <= 1 and "ring_recall_at_1pct_fpr" in t
-    assert (art / "graph" / "edges.npz").exists() and (art / "week7_test_scores.npz").exists()
+    assert (art / "graph" / "edges.npz").exists() and (art / "week7_scores.npz").exists()
     res = pd.read_csv(art / "results.csv")
     assert {"graphsage", "autoencoder"} <= set(res["model"]) and "ring_recall_at_1pct_fpr" in res
