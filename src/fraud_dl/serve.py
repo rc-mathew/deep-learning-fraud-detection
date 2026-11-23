@@ -45,7 +45,7 @@ class Scorer:
             "transaction_id": transaction_id,
             "amount": float(r["TransactionAmt"]),
             "product": str(r["ProductCD"]), "card_network": str(r["card4"]), "card_type": str(r["card6"]),
-            "transformer_score": 1 / (1 + np.exp(-logit)),
+            "transformer_score": float(1 / (1 + np.exp(-logit))),
             "transformer_latency_ms": round(latency, 3),
             "ensemble_score": ens,
             "decision": "block" if ens > self.config["threshold"] else "allow",

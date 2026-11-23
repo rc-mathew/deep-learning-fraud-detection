@@ -1,0 +1,6 @@
+{
+ "threshold": 0.04381226736926463,
+ "false_positive_cost": 10.0,
+ "seq_len": 16,
+ "note": "Test-month sample. Transformer scored live with ONNX Runtime; ensemble, reasons and similar cases precomputed from the week 8 run."
+}
