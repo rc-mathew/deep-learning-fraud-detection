@@ -110,11 +110,16 @@ src/fraud_dl/
   week8_run.py   python -m fraud_dl.week8_run --artifacts artifacts
   optimize.py    ONNX export, INT8 quantisation, CPU latency, FAISS similar-case index
   optimize_run.py  python -m fraud_dl.optimize_run --artifacts artifacts
+  build_demo.py  demo bundle: test-month sample with live-scorable windows
+  serve.py       scorer used by the API and the demo (numpy + onnxruntime only)
 notebooks/week4_data_and_baseline.ipynb   week 4 on Kaggle or Colab
 notebooks/week5_6_transformer.ipynb       weeks 5-6 on a Kaggle GPU
 notebooks/week7_graph_autoencoder.ipynb   week 7 on Kaggle
 notebooks/week8_ensemble_explain.ipynb    week 8 on Kaggle
 notebooks/week8b_onnx_faiss.ipynb         ONNX INT8 + FAISS, from week 8's output
+notebooks/build_demo_bundle.ipynb         demo/ bundle for the API and Streamlit app
+app/api.py             FastAPI: GET /health, GET /transactions, POST /score
+app/streamlit_app.py   Streamlit demo
 tests/           pipeline tests on a synthetic IEEE-CIS-shaped dataset
 ```
 
@@ -128,6 +133,18 @@ pytest
 python -m fraud_dl.prepare --data-dir path/to/ieee-fraud-detection --out-dir artifacts
 python -m fraud_dl.baseline --artifacts artifacts
 ```
+
+## Demo and API
+
+```bash
+pip install -r requirements.txt
+uvicorn app.api:app --port 8000          # POST /score {"transaction_id": 3557572}
+streamlit run app/streamlit_app.py
+```
+
+The demo serves 1,000 test-month transactions (300 fraud, 700 legitimate). The transformer scores each one live
+with ONNX Runtime; the ensemble score, decision, reason codes and similar past cases come from the week 8 run,
+because XGBoost and GraphSAGE need the full feature table and graph, which are too large to ship.
 
 ## Known caveat
 

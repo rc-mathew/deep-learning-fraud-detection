@@ -1,0 +1,7 @@
+# Serving the demo (Streamlit Community Cloud / FastAPI). Training needs `pip install -e .`
+numpy
+pandas
+onnxruntime
+streamlit
+fastapi
+uvicorn
