@@ -1,5 +1,7 @@
 # Deep Learning Fraud Detection
 
+[![tests](https://github.com/rc-mathew/deep-learning-fraud-detection/actions/workflows/tests.yml/badge.svg)](https://github.com/rc-mathew/deep-learning-fraud-detection/actions/workflows/tests.yml)
+
 **Live demo: [rc-mathew-fraud-detection.streamlit.app](https://rc-mathew-fraud-detection.streamlit.app)**: score unseen test-month transactions, see the block/allow decision, reason codes and similar past fraud cases.
 
 Fraud detection on [IEEE-CIS](https://www.kaggle.com/c/ieee-fraud-detection) built from deep learning models:
