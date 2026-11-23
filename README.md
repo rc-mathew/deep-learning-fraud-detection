@@ -1,5 +1,7 @@
 # Deep Learning Fraud Detection
 
+**Live demo: [rc-mathew-fraud-detection.streamlit.app](https://rc-mathew-fraud-detection.streamlit.app)**: score unseen test-month transactions, see the block/allow decision, reason codes and similar past fraud cases.
+
 Fraud detection on [IEEE-CIS](https://www.kaggle.com/c/ieee-fraud-detection) built from deep learning models:
 a transaction transformer with self-supervised pretraining, a graph neural network over shared
 devices and emails, and an autoencoder for unlabelled anomalies. XGBoost is kept as one baseline row.
