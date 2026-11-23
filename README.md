@@ -67,10 +67,13 @@ src/fraud_dl/
   ensemble.py    stacked ensemble, calibration, cost-based threshold, fairness
   explain.py     Captum Integrated Gradients reason codes for the transformer
   week8_run.py   python -m fraud_dl.week8_run --artifacts artifacts
+  optimize.py    ONNX export, INT8 quantisation, CPU latency, FAISS similar-case index
+  optimize_run.py  python -m fraud_dl.optimize_run --artifacts artifacts
 notebooks/week4_data_and_baseline.ipynb   week 4 on Kaggle or Colab
 notebooks/week5_6_transformer.ipynb       weeks 5-6 on a Kaggle GPU
 notebooks/week7_graph_autoencoder.ipynb   week 7 on Kaggle
 notebooks/week8_ensemble_explain.ipynb    week 8 on Kaggle
+notebooks/week8b_onnx_faiss.ipynb         ONNX INT8 + FAISS, from week 8's output
 tests/           pipeline tests on a synthetic IEEE-CIS-shaped dataset
 ```
 
