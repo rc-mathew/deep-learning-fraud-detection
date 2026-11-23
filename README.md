@@ -64,9 +64,13 @@ src/fraud_dl/
   graph.py       past-only entity graph (card, device, email + address) and GraphSAGE
   anomaly.py     autoencoder trained on legitimate transactions
   week7_run.py   python -m fraud_dl.week7_run --artifacts artifacts
+  ensemble.py    stacked ensemble, calibration, cost-based threshold, fairness
+  explain.py     Captum Integrated Gradients reason codes for the transformer
+  week8_run.py   python -m fraud_dl.week8_run --artifacts artifacts
 notebooks/week4_data_and_baseline.ipynb   week 4 on Kaggle or Colab
 notebooks/week5_6_transformer.ipynb       weeks 5-6 on a Kaggle GPU
-notebooks/week7_graph_autoencoder.ipynb   week 7 on a Kaggle GPU
+notebooks/week7_graph_autoencoder.ipynb   week 7 on Kaggle
+notebooks/week8_ensemble_explain.ipynb    week 8 on Kaggle
 tests/           pipeline tests on a synthetic IEEE-CIS-shaped dataset
 ```
 

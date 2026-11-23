@@ -15,6 +15,7 @@ dependencies = [
     "xgboost>=2.0",
     "torch>=2.1",
     "torch_geometric>=2.4",
+    "captum>=0.7",
 ]
 
 [project.optional-dependencies]

@@ -106,10 +106,15 @@ class TxnTransformer(nn.Module):
         self.cat_heads = nn.ModuleList(nn.Linear(d_model, c) for c in cardinality)
         self.num_head = nn.Linear(d_model, n_num)
 
-    def encode(self, cat, num, isna, pad, num_masked=None):
+    def field_embeddings(self, cat):
+        """(B, L, n_cat_fields, d): one vector per categorical field, before they are summed."""
+        return torch.stack([emb(cat[..., j]) for j, emb in enumerate(self.cat_emb)], dim=2)
+
+    def encode(self, cat, num, isna, pad, num_masked=None, field_embs=None):
         if num_masked is None:
             num_masked = torch.zeros_like(num)
-        x = sum(emb(cat[..., j]) for j, emb in enumerate(self.cat_emb))
+        # field_embs lets Captum attribute the score to each categorical field.
+        x = (self.field_embeddings(cat) if field_embs is None else field_embs).sum(dim=2)
         x = x + self.num_proj(torch.cat([num, isna, num_masked], dim=-1))
         x = self.ln_in(x + self.pos_emb.weight[None])
         attns = []
