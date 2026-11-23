@@ -59,6 +59,25 @@ card-history labelling effect, not fraud the bank could catch earlier.
   then the M match flags and TransactionAmt. IEEE-CIS anonymises what the C and M fields mean, so these codes
   point at fields, not at explanations a customer could read.
 
+## Serving the transformer on CPU
+
+Single-transaction scoring on Kaggle's CPU (1 thread), test month, the week 8 transformer:
+
+| Format | Size | p50 latency | p95 latency | Recall @ 1% FPR | PR-AUC |
+| --- | --- | --- | --- | --- | --- |
+| PyTorch fp32 | 4.31 MB | 1.65 ms | 1.89 ms | 0.353 | 0.405 |
+| ONNX fp32 | 2.38 MB | **0.52 ms** | **0.59 ms** | 0.353 | 0.405 |
+| ONNX INT8 | **0.66 MB** | 0.55 ms | 0.89 ms | 0.352 | 0.406 |
+
+Exporting to ONNX gives the speed-up (3.2x at p50). INT8 quantisation, including the embedding tables, makes the
+file 3.6x smaller than ONNX fp32 with the same recall and PR-AUC, but it is not faster and its p95 is worse, and
+single scores can move by up to 0.18 even though the ranking holds. ONNX fp32 is the better choice for latency;
+INT8 only if size matters.
+
+**Similar-case search (FAISS).** 17,669 past confirmed frauds are indexed by the transformer's last-token vector.
+Test frauds and test legitimate transactions are equally close to their nearest past fraud (mean cosine similarity
+0.893 vs 0.900), so the index is a lookup tool for investigators ("show me similar past cases"), not a fraud signal.
+
 ## Data pipeline (week 4)
 
 1. **Load** `train_transaction.csv` + `train_identity.csv` (Kaggle's test files have no labels, so they are not used).
