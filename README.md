@@ -11,12 +11,13 @@ Every model is judged on the same **time-based split** (train on the past, test 
 
 | Model | Recall @ 1% FPR | Recall @ 5% FPR | PR-AUC | ROC-AUC | First-fraud recall @ 1% FPR | Ring-fraud recall @ 1% FPR |
 | --- | --- | --- | --- | --- | --- | --- |
-| XGBoost baseline | **0.470** | **0.650** | **0.551** | **0.903** | **0.541** | **0.779** |
+| XGBoost baseline | 0.470 | 0.650 | 0.551 | 0.903 | **0.541** | 0.779 |
 | Transformer, from scratch | 0.378 | 0.590 | 0.430 | 0.858 | 0.414 | not measured |
 | Transformer, pretrained | 0.381 | 0.565 | 0.418 | 0.859 | 0.393 | not measured |
 | GNN (GraphSAGE) | 0.310 | 0.488 | 0.355 | 0.842 | 0.351 | 0.591 |
 | Autoencoder (no labels) | 0.007 | 0.344 | 0.121 | 0.772 | 0.011 | 0.009 |
-| Ensemble | _week 8_ | | | | | |
+| **Ensemble (stacked)** | **0.476** | **0.685** | **0.562** | **0.915** | 0.526 | **0.786** |
+| Rank average (no fitting) | 0.394 | 0.615 | 0.460 | 0.896 | 0.436 | 0.734 |
 
 First-fraud recall drops transactions from cards that already had a fraud (see Known caveat).
 
@@ -36,6 +37,27 @@ hit its 300-epoch cap on CPU (validation PR-AUC 0.45), so it is undertrained. Th
 without labels, ranks fraud above chance (ROC-AUC 0.77, 34% recall at 5% FPR) but is almost useless at
 1% FPR; its value, if any, is as an extra signal in the ensemble. XGBoost rows differ slightly between
 runs (0.466 GPU, 0.470 CPU).
+
+**Week 8 finding.** A logistic-regression stack fitted on the validation month (weights: XGBoost 1.33,
+transformer 0.49, autoencoder 0.16, GraphSAGE -0.03) beats XGBoost alone, but only slightly: +0.6 points of
+recall at 1% FPR, +3.5 at 5% FPR, +0.011 PR-AUC. Leaving each model out shows where that comes from: the
+transformer adds most of it (PR-AUC 0.554 without it), GraphSAGE adds nothing, the autoencoder almost nothing.
+The gain is not free: first-fraud recall falls from 0.541 to 0.526, so part of what the transformer adds is the
+card-history labelling effect, not fraud the bank could catch earlier.
+
+- **Calibration.** Both are well calibrated on the test month (expected calibration error 0.003 ensemble,
+  0.006 XGBoost; Brier 0.022 each), so the stack's scores can be read as probabilities.
+- **Cost threshold.** With a missed fraud costing its amount and a blocked good customer an assumed $10, the
+  threshold chosen on validation flags 9.5% of good customers and catches 76.5% of fraud (77.9% of fraud
+  dollars). Test cost: $179k, against $295k at the 1% FPR threshold and $457k blocking nothing. Blocking 1 in
+  10 good customers is aggressive; the $10 assumption drives it, and a real team would set that cost.
+- **Fairness at that threshold (overall FPR 9.5%).** Good customers are blocked more often on Discover cards
+  (2.7x), credit cards (1.9x vs 0.7x for debit), products C (2.9x) and H (1.8x), and when the country code is
+  missing (2.9x). Each of these groups also has a higher fraud rate (credit 6.3% vs debit 2.6%; product C 13.6%),
+  so the model is following real risk, but those customers still carry more of the false alarms.
+- **Reason codes** (Captum Integrated Gradients on the transformer, top 200 flagged): C1, C14, C13 and C2 lead,
+  then the M match flags and TransactionAmt. IEEE-CIS anonymises what the C and M fields mean, so these codes
+  point at fields, not at explanations a customer could read.
 
 ## Data pipeline (week 4)
 
