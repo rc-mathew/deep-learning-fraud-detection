@@ -108,6 +108,17 @@ INT8 only if size matters.
 Test frauds and test legitimate transactions are equally close to their nearest past fraud (mean cosine similarity
 0.893 vs 0.900), so the index is a lookup tool for investigators ("show me similar past cases"), not a fraud signal.
 
+
+## Kaggle runs (public, with outputs)
+
+| Step | Notebook |
+| --- | --- |
+| 1. Time split, card sequences, XGBoost baseline | [Fraud DL 1](https://www.kaggle.com/code/reubencmathew74/fraud-dl-1-time-split-xgboost-baseline) |
+| 2. Transformer from scratch vs masked pretraining | [Fraud DL 2](https://www.kaggle.com/code/reubencmathew74/fraud-dl-2-transformer-masked-pretraining) |
+| 3. GraphSAGE and autoencoder | [Fraud DL 3](https://www.kaggle.com/code/reubencmathew74/fraud-dl-3-graphsage-autoencoder) |
+| 4. Ensemble, calibration, cost threshold, fairness, reason codes | [Fraud DL 4](https://www.kaggle.com/code/reubencmathew74/fraud-dl-4-ensemble-cost-threshold-fairness) |
+| 5. ONNX INT8 and FAISS similar-case search | [Fraud DL 5](https://www.kaggle.com/code/reubencmathew74/fraud-dl-5-onnx-int8-faiss-case-search) |
+
 ## Data pipeline (week 4)
 
 1. **Load** `train_transaction.csv` + `train_identity.csv` (Kaggle's test files have no labels, so they are not used).
