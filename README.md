@@ -11,6 +11,32 @@ devices and emails, and an autoencoder for unlabelled anomalies. XGBoost is kept
 Every model is judged on the same **time-based split** (train on the past, test on the last 30 days) and on
 **recall at 1% false-positive rate**, not ROC-AUC alone.
 
+## Summary
+
+- **Best model: a stacked ensemble** of XGBoost, the transformer, GraphSAGE and the autoencoder. It catches
+  **47.6% of fraud at a 1% false-positive rate** (PR-AUC 0.562, ROC-AUC 0.915) on a month it never saw.
+- **Deep learning adds little over XGBoost here:** +0.6 points of recall at 1% FPR, almost all from the transformer,
+  and part of that comes from how IEEE-CIS labels card history (first-fraud recall drops 1.5 points).
+- **Cost-based threshold:** $179k expected loss on the test month, against $295k at a 1% FPR threshold and $457k
+  for blocking nothing, at an assumed $10 per wrongly blocked customer.
+- **Serving:** the transformer exported to ONNX scores a transaction in 0.5 ms on one CPU thread (3.2x faster
+  than PyTorch); INT8 makes it 3.6x smaller with the same accuracy.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    A[IEEE-CIS transactions<br/>590k, 434 columns] --> B[Time split<br/>train / val / test month]
+    B --> C[Card id + past-only<br/>velocity features]
+    C --> X[XGBoost<br/>all features]
+    C --> T[Transformer<br/>last 16 card transactions]
+    C --> G[GraphSAGE<br/>past-only card, device,<br/>email + address graph]
+    C --> E[Autoencoder<br/>legitimate only]
+    X & T & G & E --> S[Stacked ensemble<br/>fitted on val month]
+    S --> D{Cost-based threshold}
+    D --> API[FastAPI / Streamlit<br/>ONNX transformer,<br/>Captum reason codes,<br/>FAISS similar cases]
+```
+
 ## Results (test set: last 30 days)
 
 | Model | Recall @ 1% FPR | Recall @ 5% FPR | PR-AUC | ROC-AUC | First-fraud recall @ 1% FPR | Ring-fraud recall @ 1% FPR |
