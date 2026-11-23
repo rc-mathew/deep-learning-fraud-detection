@@ -1,44 +1,25 @@
 # Deep Learning Fraud Detection
 
 [![tests](https://github.com/rc-mathew/deep-learning-fraud-detection/actions/workflows/tests.yml/badge.svg)](https://github.com/rc-mathew/deep-learning-fraud-detection/actions/workflows/tests.yml)
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://rc-mathew-fraud-detection.streamlit.app)
 
 **Live demo: [rc-mathew-fraud-detection.streamlit.app](https://rc-mathew-fraud-detection.streamlit.app)**: score unseen test-month transactions, see the block/allow decision, reason codes and similar past fraud cases.
 
-**Tools**
-
-<img src="https://img.shields.io/badge/Python-3776ab?style=flat-square&logo=python&logoColor=white" alt="Python"/>
-<img src="https://img.shields.io/badge/PyTorch-ee4c2c?style=flat-square&logo=pytorch&logoColor=white" alt="PyTorch"/>
-<img src="https://img.shields.io/badge/PyTorch%20Geometric-3c2179?style=flat-square" alt="PyTorch Geometric"/>
-<img src="https://img.shields.io/badge/XGBoost-189fdd?style=flat-square" alt="XGBoost"/>
-<img src="https://img.shields.io/badge/scikit--learn-f7931e?style=flat-square&logo=scikitlearn&logoColor=white" alt="scikit--learn"/>
-<img src="https://img.shields.io/badge/pandas-150458?style=flat-square&logo=pandas&logoColor=white" alt="pandas"/>
-<img src="https://img.shields.io/badge/NumPy-013243?style=flat-square&logo=numpy&logoColor=white" alt="NumPy"/>
-<img src="https://img.shields.io/badge/Captum-812ce5?style=flat-square" alt="Captum"/>
-<img src="https://img.shields.io/badge/ONNX%20Runtime-005ced?style=flat-square&logo=onnx&logoColor=white" alt="ONNX Runtime"/>
-<img src="https://img.shields.io/badge/FAISS-0467df?style=flat-square&logo=meta&logoColor=white" alt="FAISS"/>
-<img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI"/>
-<img src="https://img.shields.io/badge/Streamlit-ff4b4b?style=flat-square&logo=streamlit&logoColor=white" alt="Streamlit"/>
-<img src="https://img.shields.io/badge/pytest-0a9edc?style=flat-square&logo=pytest&logoColor=white" alt="pytest"/>
-<img src="https://img.shields.io/badge/GitHub%20Actions-2088ff?style=flat-square&logo=githubactions&logoColor=white" alt="GitHub Actions"/>
-<img src="https://img.shields.io/badge/Kaggle-20beff?style=flat-square&logo=kaggle&logoColor=white" alt="Kaggle"/>
-
-**Skills**
-
-<img src="https://img.shields.io/badge/Transformers%20from%20scratch-6f42c1?style=flat-square" alt="Transformers from scratch"/>
-<img src="https://img.shields.io/badge/Self--supervised%20pretraining-6f42c1?style=flat-square" alt="Self--supervised pretraining"/>
-<img src="https://img.shields.io/badge/Graph%20neural%20networks-6f42c1?style=flat-square" alt="Graph neural networks"/>
-<img src="https://img.shields.io/badge/Anomaly%20detection-6f42c1?style=flat-square" alt="Anomaly detection"/>
-<img src="https://img.shields.io/badge/Stacked%20ensemble-6f42c1?style=flat-square" alt="Stacked ensemble"/>
-<img src="https://img.shields.io/badge/Time--based%20validation-0e8a16?style=flat-square" alt="Time--based validation"/>
-<img src="https://img.shields.io/badge/Leakage%20checks-0e8a16?style=flat-square" alt="Leakage checks"/>
-<img src="https://img.shields.io/badge/Calibration-0e8a16?style=flat-square" alt="Calibration"/>
-<img src="https://img.shields.io/badge/Cost--based%20thresholds-0e8a16?style=flat-square" alt="Cost--based thresholds"/>
-<img src="https://img.shields.io/badge/Fairness%20checks-0e8a16?style=flat-square" alt="Fairness checks"/>
-<img src="https://img.shields.io/badge/Explainability%20(Integrated%20Gradients)-0e8a16?style=flat-square" alt="Explainability (Integrated Gradients)"/>
-<img src="https://img.shields.io/badge/INT8%20quantisation-d73a49?style=flat-square" alt="INT8 quantisation"/>
-<img src="https://img.shields.io/badge/Vector%20search-d73a49?style=flat-square" alt="Vector search"/>
-<img src="https://img.shields.io/badge/Model%20serving-d73a49?style=flat-square" alt="Model serving"/>
-<img src="https://img.shields.io/badge/CI%2FCD-d73a49?style=flat-square" alt="CI%2FCD"/>
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/Deep_learning-PyTorch-EE4C2C?logo=pytorch&logoColor=white)
+![Transformer](https://img.shields.io/badge/Sequence_model-Transformer_from_scratch-6F42C1)
+![Pretraining](https://img.shields.io/badge/Self--supervised-Masked--field_pretraining-6F42C1)
+![PyG](https://img.shields.io/badge/Graph-PyTorch_Geometric_GraphSAGE-3C2179)
+![Autoencoder](https://img.shields.io/badge/Anomaly-Autoencoder-6F42C1)
+![XGBoost](https://img.shields.io/badge/Baseline-XGBoost-189FDD)
+![scikit-learn](https://img.shields.io/badge/Ensemble-scikit--learn_stacking-F7931E?logo=scikitlearn&logoColor=white)
+![Captum](https://img.shields.io/badge/Explainability-Captum_Integrated_Gradients-812CE5)
+![ONNX](https://img.shields.io/badge/Serving-ONNX_Runtime_INT8-005CED?logo=onnx&logoColor=white)
+![FAISS](https://img.shields.io/badge/Similar_cases-FAISS-0467DF?logo=meta&logoColor=white)
+![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?logo=fastapi&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Demo-Streamlit-FF4B4B?logo=streamlit&logoColor=white)
+![Kaggle](https://img.shields.io/badge/Training-Kaggle_notebooks-20BEFF?logo=kaggle&logoColor=white)
+![pytest](https://img.shields.io/badge/Tests-pytest-0A9EDC?logo=pytest&logoColor=white)
 
 Fraud detection on [IEEE-CIS](https://www.kaggle.com/c/ieee-fraud-detection) built from deep learning models:
 a transaction transformer with self-supervised pretraining, a graph neural network over shared

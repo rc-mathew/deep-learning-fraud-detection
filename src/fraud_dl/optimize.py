@@ -84,7 +84,8 @@ def compare(model: TxnTransformer, data: SeqData, out_dir: Path, test: np.ndarra
         res[name] = {"size_mb": round(size / 1e6, 3), **latency_ms(fn, data, test),
                      "recall_at_1pct_fpr": rep["recall_at_1pct_fpr"], "pr_auc": rep["pr_auc"]}
         res[name]["_scores"] = scores
-    res["int8_max_score_diff"] = float(np.abs(res["onnx_int8"]["_scores"] - res["pytorch_fp32"]["_scores"]).max())
+    diff = np.abs(res["onnx_int8"]["_scores"] - res["pytorch_fp32"]["_scores"])
+    res["int8_max_score_diff"], res["int8_mean_score_diff"] = float(diff.max()), float(diff.mean())
     for k in ("pytorch_fp32", "onnx_fp32", "onnx_int8"):
         res[k].pop("_scores")
     return res
