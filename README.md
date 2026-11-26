@@ -5,6 +5,15 @@
 
 **Live demo: [rc-mathew-fraud-detection.streamlit.app](https://rc-mathew-fraud-detection.streamlit.app)**: score unseen test-month transactions, see the block/allow decision, reason codes and similar past fraud cases.
 
+**Run the demo locally in a couple of minutes** (CPU only; the demo data ships with the repo):
+
+```bash
+git clone https://github.com/rc-mathew/deep-learning-fraud-detection
+cd deep-learning-fraud-detection
+pip install -r requirements.txt
+streamlit run app/streamlit_app.py
+```
+
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
 ![PyTorch](https://img.shields.io/badge/Deep_learning-PyTorch-EE4C2C?logo=pytorch&logoColor=white)
 ![Transformer](https://img.shields.io/badge/Sequence_model-Transformer_from_scratch-6F42C1)
@@ -27,6 +36,10 @@ devices and emails, and an autoencoder for unlabelled anomalies. XGBoost is kept
 
 Every model is judged on the same **time-based split** (train on the past, test on the last 30 days) and on
 **recall at 1% false-positive rate**, not ROC-AUC alone.
+
+**TL;DR:** I built a transformer from scratch, a graph neural network and an autoencoder to beat XGBoost on
+card fraud. Together they barely do (+0.6 points of recall at 1% FPR), and this repo measures exactly where
+that small gain comes from, including how much of it is a labelling artefact of the dataset.
 
 ## Summary
 
